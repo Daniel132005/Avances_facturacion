@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DevLog - Lógica de la Bitácora de Avances
  */
 
@@ -14,55 +14,75 @@ const state = {
 const FALLBACK_POSTS = [
   {
     "id": "dia-2",
-    "date": "2026-09-21",
+    "date": "2026-09-20",
     "dayNumber": 2,
-    "title": "Diseño del Dashboard y Sistema de Notificaciones",
-    "category": "Frontend / UI",
+    "title": "MVP en Next.js 16, Migraciones PostgreSQL con RLS y Motor de Correlativos",
+    "category": "Fullstack & Base de Datos",
     "tags": [
-      "UI",
-      "Dashboard",
-      "CSS",
-      "Frontend"
+      "Next.js",
+      "TypeScript",
+      "PostgreSQL",
+      "RLS",
+      "Supabase",
+      "Auth.js",
+      "TailwindCSS",
+      "Vitest"
     ],
-    "summary": "Implementación de los nuevos widgets analíticos, paneles interactivos y paleta de colores refinada.",
+    "summary": "Construcción completa del MVP funcional con Next.js 16, TypeScript, Tailwind v4 y base de datos Supabase/PostgreSQL con seguridad RLS estricta y asignación atómica de correlativos fiscales.",
     "highlights": [
-      "Componentes modulares de métricas en tiempo real",
-      "Soporte dinámico para modo oscuro y claro",
-      "Optimización responsiva para pantallas móviles y desktop"
+      "Migraciones DB (000 a 012): Roles con nexus_app, políticas RLS por empresa_id, unicidad de punto de emisión y ajustes de pooler",
+      "Autenticación Auth.js multi-empresa con cambio de contexto activo en vivo sin necesidad de re-login",
+      "Transacciones con conTenant() inyectando SET LOCAL para aislamiento estricto que falla cerrado",
+      "Asignador atómico de correlativos fiscales con UPDATE ... RETURNING para evitar huecos en numeración",
+      "Pantallas operativas: Login, Dashboard con KPIs del día, Listado y Vista de Documento en dos fases (Carga y Cobro)",
+      "Integración de tasa BCV en tiempo real y pruebas automatizadas de aislamiento y concurrencia (Vitest)"
     ],
     "screenshots": [
       {
-        "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Vista previa del Dashboard con gráficos interactivos y métricas"
+        "url": "assets/uploads/nexus-dashboard-kpis.png",
+        "caption": "Dashboard Principal Nexus: KPIs en tiempo real, tasa BCV y listado de últimos documentos (PROQUIMICOS, C.A.)"
       },
       {
-        "url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Panel de resumen de actividad y widgets analíticos"
+        "url": "assets/uploads/nexus-factura-items-cabecera.png",
+        "caption": "Emisión de Documento: Encabezado de factura, selección de cliente y captura rápida de productos"
+      },
+      {
+        "url": "assets/uploads/nexus-factura-totales-pie.png",
+        "caption": "Detalle de Factura: Grilla de ítems con cantidades, precios en USD/Bs y barra de totales con atajos de teclado"
+      },
+      {
+        "url": "assets/uploads/nexus-factura-modulo-cobro.png",
+        "caption": "Módulo de Cobro: Formas de pago (Transferencia), desglose fiscal de base imponible, IVA 16% y saldo cuadrado"
       }
     ],
     "author": "Daniel"
   },
   {
     "id": "dia-1",
-    "date": "2026-09-20",
+    "date": "2026-09-19",
     "dayNumber": 1,
-    "title": "Estructuración Inicial de la Arquitectura",
-    "category": "Setup & Backend",
+    "title": "Análisis de Requerimientos, Arquitectura Multi-Empresa e Identidad de Marca Nexus",
+    "category": "Arquitectura & Diseño UI",
     "tags": [
-      "Setup",
-      "Backend",
-      "Database"
+      "Arquitectura",
+      "MultiTenant",
+      "PostgreSQL",
+      "UI/UX",
+      "Branding",
+      "Requerimientos"
     ],
-    "summary": "Definición del modelo de datos, rutas de API principales y configuración del entorno de desarrollo.",
+    "summary": "Definición integral de especificaciones funcionales, modelo de datos multi-tenant, reglas fiscales/RLS y diseño de identidad de marca Nexus Facturación.",
     "highlights": [
-      "Configuración del repositorio y pipeline inicial",
-      "Modelado de la base de datos y esquemas principales",
-      "Pruebas de conectividad y endpoints base del servicio"
+      "Análisis de requerimientos: Tenancy con aislamiento D1 por empresa_id, consolidación y multimoneda con tasa congelada",
+      "Documentación técnica: Estrategia de asignación de correlativos (D5), matriz de riesgos y máquina de estados",
+      "Diseño de UI e identidad: Maquetas de login claro/oscuro y especímenes tipográficos para caja",
+      "Diseño vectorial: Creación de isotipos y logotipos de Nexus Facturación y Proquímicos",
+      "Modelado relacional inicial para empresas, sucursales, puntos de emisión, usuarios, catálogos y documentos"
     ],
     "screenshots": [
       {
-        "url": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Estructura de directorios y configuración base del proyecto"
+        "url": "assets/uploads/login-caja-nexus-claro.png",
+        "caption": "Maqueta de interfaz de Login Caja Nexus en Modo Claro"
       }
     ],
     "author": "Daniel"
@@ -141,40 +161,22 @@ async function loadPosts() {
 function updateStats() {
   const totalDays = state.posts.length;
   let totalScreenshots = 0;
-  const allTags = new Set();
 
   state.posts.forEach(post => {
     if (post.screenshots && Array.isArray(post.screenshots)) {
       totalScreenshots += post.screenshots.length;
     }
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach(tag => allTags.add(tag.trim()));
-    }
   });
 
-  postsCountBadge.textContent = totalDays + (totalDays === 1 ? ' avance registrado' : ' avances registrados');
-  statDaysCount.textContent = totalDays;
-  statScreenshotsCount.textContent = totalScreenshots;
-  statTagsCount.textContent = allTags.size;
+  if (postsCountBadge) postsCountBadge.textContent = totalDays + (totalDays === 1 ? ' avance registrado' : ' avances registrados');
+  if (statDaysCount) statDaysCount.textContent = totalDays;
+  if (statScreenshotsCount) statScreenshotsCount.textContent = totalScreenshots;
+  if (statTagsCount) statTagsCount.textContent = '0';
 }
 
 function renderTags() {
-  const allTags = new Set();
-  state.posts.forEach(post => {
-    if (post.tags && Array.isArray(post.tags)) {
-      post.tags.forEach(tag => allTags.add(tag.trim()));
-    }
-  });
-
-  tagsFilterContainer.innerHTML = '<button class="tag-btn ' + (state.currentTag === 'all' ? 'active' : '') + '" data-tag="all">Todos</button>';
-
-  allTags.forEach(tag => {
-    const btn = document.createElement('button');
-    btn.className = 'tag-btn ' + (state.currentTag === tag ? 'active' : '');
-    btn.setAttribute('data-tag', tag);
-    btn.textContent = '#' + tag;
-    tagsFilterContainer.appendChild(btn);
-  });
+  if (!tagsFilterContainer) return;
+  tagsFilterContainer.innerHTML = '';
 }
 
 function renderPosts() {
@@ -239,7 +241,6 @@ function renderPosts() {
         highlightsHtml +
         screenshotsHtml +
         '<footer class="post-footer">' +
-          tagsHtml +
           '<div class="post-author"><i class="fa-regular fa-user"></i> ' + (post.author || 'Daniel') + '</div>' +
         '</footer>' +
       '</div>' +
@@ -310,14 +311,16 @@ function prevLightbox() {
 }
 
 function setupEventListeners() {
-  tagsFilterContainer.addEventListener('click', (e) => {
-    const btn = e.target.closest('.tag-btn');
-    if (!btn) return;
-    state.currentTag = btn.getAttribute('data-tag');
-    document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderPosts();
-  });
+  if (tagsFilterContainer) {
+    tagsFilterContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tag-btn');
+      if (!btn) return;
+      state.currentTag = btn.getAttribute('data-tag');
+      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderPosts();
+    });
+  }
 
   searchInput.addEventListener('input', (e) => {
     state.searchQuery = e.target.value;
@@ -377,7 +380,7 @@ function setupEventListeners() {
     }
   });
 
-  openNewPostModalBtn.addEventListener('click', openNewPostModal);
+  if (openNewPostModalBtn) openNewPostModalBtn.addEventListener('click', openNewPostModal);
   closeNewPostModalBtn.addEventListener('click', closeNewPostModal);
   newPostOverlay.addEventListener('click', closeNewPostModal);
 
@@ -526,3 +529,4 @@ function updateThemeIcon(theme) {
     themeIcon.className = 'fa-solid fa-sun';
   }
 }
+

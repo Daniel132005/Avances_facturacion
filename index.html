@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8">
@@ -42,11 +42,6 @@
         <button id="themeToggleBtn" class="btn btn-icon" title="Cambiar tema">
           <i class="fa-solid fa-moon" id="themeIcon"></i>
         </button>
-
-        <button id="openNewPostModalBtn" class="btn btn-primary">
-          <i class="fa-solid fa-plus"></i>
-          <span>Nuevo Avance</span>
-        </button>
       </div>
     </div>
   </header>
@@ -79,13 +74,6 @@
             <span class="stat-label">Capturas Subidas</span>
           </div>
         </div>
-        <div class="stat-card">
-          <div class="stat-icon"><i class="fa-solid fa-tags"></i></div>
-          <div class="stat-info">
-            <span class="stat-value" id="statTagsCount">0</span>
-            <span class="stat-label">Categorías / Tags</span>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -98,12 +86,6 @@
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input type="text" id="searchInput" placeholder="Buscar por título, objetivo o descripción...">
           <button id="clearSearchBtn" class="clear-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
-        <div class="tags-filter-wrapper">
-          <div class="tags-container" id="tagsFilterContainer">
-            <button class="tag-btn active" data-tag="all">Todos</button>
-          </div>
         </div>
       </div>
     </div>
@@ -147,8 +129,8 @@
       
       <div class="lightbox-image-wrapper">
         <img id="lightboxImg" src="" alt="Captura ampliada">
-        <div class="lightbox-caption" id="lightboxCaption"></div>
       </div>
+      <div class="lightbox-caption" id="lightboxCaption"></div>
 
       <button class="lightbox-nav lightbox-next" id="lightboxNextBtn" title="Siguiente (Flecha Der)"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
@@ -264,3 +246,4 @@
   <script src="app.js"></script>
 </body>
 </html>
+

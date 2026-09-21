@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    DevLog - Bitácora de Avances Diarios
    Modern Clean & Developer Aesthetic
    ========================================================================== */
@@ -322,9 +322,9 @@ h1, h2, h3, h4 {
 /* Stats */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  max-width: 750px;
+  max-width: 520px;
   margin: 0 auto;
 }
 
@@ -652,21 +652,26 @@ h1, h2, h3, h4 {
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border-color);
-  background: #000;
+  background: #0a0e17;
   cursor: pointer;
   aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .screenshot-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
+  object-fit: contain;
+  object-position: center;
+  background: #0a0e17;
+  transition: transform 0.3s ease;
   display: block;
 }
 
 .screenshot-card:hover img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 .screenshot-overlay {
@@ -854,40 +859,52 @@ h1, h2, h3, h4 {
 .lightbox-content {
   position: relative;
   z-index: 2;
-  max-width: 90vw;
-  max-height: 90vh;
+  max-width: 94vw;
+  max-height: 92vh;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 12px;
 }
 
 .lightbox-image-wrapper {
   position: relative;
   max-width: 100%;
-  max-height: 80vh;
+  max-height: calc(85vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-md);
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.85);
+  background: #0a0e17;
+  border: 1px solid var(--border-color);
 }
 
 .lightbox-image-wrapper img {
   max-width: 100%;
-  max-height: 80vh;
+  max-height: calc(85vh - 65px);
+  width: auto;
+  height: auto;
   object-fit: contain;
+  object-position: center;
   display: block;
 }
 
 .lightbox-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  padding: 12px 20px;
-  font-size: 0.9rem;
-  backdrop-filter: blur(4px);
+  position: static;
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: #F3F4F6;
+  padding: 10px 24px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  backdrop-filter: blur(8px);
   text-align: center;
+  max-width: 850px;
+  box-shadow: var(--shadow-md);
 }
 
 .lightbox-close {
@@ -1189,3 +1206,4 @@ h1, h2, h3, h4 {
   .lightbox-next { right: 10px; }
   .btn-text { display: none; }
 }
+

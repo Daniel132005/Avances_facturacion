@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fase 1: Carga de Líneas · FAC-00048912 · PROQUIMICOS, C.A.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-surface: #ffffff;
+      --color-surface-2: #f1f3f5;
+      --color-surface-3: #e9ecef;
+      --color-surface-read: #f9fafb;
+      --color-border: #d0d5dd;
+      --color-border-subtle: #e4e7ec;
+      --color-text: #101828;
+      --color-text-2: #475467;
+      --color-text-3: #667085;
+      --color-marca: #b9603a;
+      --color-marca-hover: #a5522f;
+      --color-accent: #1570ef;
+      --color-accent-fill: #eff8ff;
+      --color-success: #067647;
+      --color-warning: #b54708;
+      --color-danger: #b42318;
+      --empresa-color: #4c2a85; /* Proquímicos Violeta */
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--color-surface-2);
+      color: var(--color-text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      line-height: 1.25;
+      font-feature-settings: "tnum" 1, "cv05" 1;
+      font-variant-numeric: tabular-nums;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .window-card {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    /* Zona A */
+    .company-bar {
+      background: var(--empresa-color);
+      color: #ffffff;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 11px;
+    }
+    .company-title { font-weight: 600; font-size: 12.5px; }
+    .company-meta { opacity: 0.88; font-size: 11px; }
+    .company-dot { opacity: 0.45; }
+
+    .doc-tabs-bar {
+      padding: 10px 14px 6px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .tabs { display: flex; gap: 16px; }
+    .tab {
+      padding-bottom: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-3);
+    }
+    .tab.active {
+      color: var(--color-text);
+      font-weight: 600;
+      border-bottom: 2px solid var(--color-accent);
+    }
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--color-text-3);
+      padding: 4px 14px 8px;
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
+    .doc-meta strong { color: var(--color-text); font-weight: 600; }
+    .badge-status {
+      background: var(--color-surface-3);
+      color: var(--color-text-2);
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Zona B */
+    .client-section {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      background: #fafbfc;
+    }
+    .section-title {
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--color-text-3);
+      margin-bottom: 4px;
+    }
+    .client-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tecla {
+      display: inline-block;
+      background: var(--color-surface-3);
+      border: 1px solid var(--color-border);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: var(--color-text-2);
+      margin-right: 4px;
+    }
+    .tecla-inv {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      border-radius: 3px;
+      padding: 1px 5px;
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-left: 6px;
+    }
+    .client-name { font-size: 12.5px; font-weight: 600; color: var(--color-text); }
+    .client-address { font-size: 11px; color: var(--color-text-2); }
+    .client-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 6px;
+    }
+    .client-item-lbl { font-size: 10px; color: var(--color-text-3); }
+    .client-item-val { font-size: 11.5px; font-weight: 500; color: var(--color-text); }
+
+    /* Zona C */
+    .capture-section {
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .capture-input {
+      flex: 1;
+      height: 28px;
+      background: var(--color-surface-read);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 0 10px;
+      font-size: 11.5px;
+      color: var(--color-text-2);
+    }
+
+    /* Zona D: Grilla */
+    .grid-section { overflow-x: auto; }
+    table.data-grid { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+    table.data-grid thead th {
+      background: var(--color-surface-3);
+      color: var(--color-text-3);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 7px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    table.data-grid thead th.text-right { text-align: right; }
+    table.data-grid thead th.text-center { text-align: center; }
+    table.data-grid tbody td {
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--color-border-subtle);
+      color: var(--color-text);
+      height: 26px;
+    }
+    table.data-grid tbody tr:hover { background: #f8fafc; }
+    table.data-grid tbody tr.active-row {
+      background: var(--color-accent-fill);
+      border-left: 3px solid var(--color-accent);
+    }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+    .text-muted { color: var(--color-text-3); }
+
+    /* Barra Resumen Fase Carga */
+    .carga-bottom-bar {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--color-border);
+      background: #fafbfc;
+    }
+    .carga-stat { font-size: 11px; color: var(--color-text-3); }
+    .carga-stat strong { color: var(--color-text); font-weight: 600; margin-left: 2px; }
+    .btn-cobrar {
+      margin-left: auto;
+      background: var(--color-marca);
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 8px 18px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(185, 96, 58, 0.25);
+    }
+    .total-preview { text-align: right; margin-left: auto; }
+    .total-preview-bs { font-size: 18px; font-weight: 700; color: var(--color-text); }
+    .total-preview-usd { font-size: 11px; color: var(--color-text-3); }
+
+    /* Zona F */
+    .shortcuts-bar {
+      background: var(--color-surface-3);
+      padding: 6px 14px;
+      display: flex;
+      gap: 16px;
+      font-size: 10.5px;
+      color: var(--color-text-2);
+      border-top: 1px solid var(--color-border);
+    }
+    .shortcut-item { display: flex; align-items: center; }
+  </style>
+</head>
+<body>
+
+  <div class="window-card">
+    
+    <!-- Zona A: Empresa Activa -->
+    <div class="company-bar">
+      <span class="company-title">PROQUIMICOS, C.A.</span>
+      <span class="company-meta">RIF J-40123456-7</span>
+      <span class="company-dot">·</span>
+      <span class="company-meta">Sucursal Principal Valencia</span>
+      <span class="company-dot">·</span>
+      <span class="company-meta">Punto: Caja 1 · Serie A</span>
+    </div>
+
+    <div class="doc-tabs-bar">
+      <div class="tabs">
+        <span class="tab active">FACTURA</span>
+        <span class="tab">NOTA DE CRÉDITO</span>
+        <span class="tab">NOTA DE DÉBITO</span>
+        <span class="tab">COTIZACIÓN</span>
+        <span class="tab">NOTA DE ENTREGA</span>
+      </div>
+      <div style="font-size: 11px; font-weight: 600; color: var(--color-accent); background: var(--color-accent-fill); padding: 3px 8px; border-radius: 4px; border: 1px solid #b2ddff;">
+        [FASE 1: CARGA DE LÍNEAS E ÍTEMS]
+      </div>
+    </div>
+
+    <div class="doc-meta">
+      <span><strong>FACTURA FAC-00048912</strong></span>
+      <span>·</span>
+      <span>Control: <strong>00-00892410</strong></span>
+      <span>·</span>
+      <span>Fecha: <strong>24/10/2026</strong></span>
+      <span>·</span>
+      <span>Tasa BCV: <strong>827,74 Bs/USD</strong> (vig. 24/10/2026)</span>
+      <span>·</span>
+      <span class="badge-status">BORRADOR</span>
+    </div>
+
+    <!-- Zona B: Cliente -->
+    <div class="client-section">
+      <div class="section-title">Cliente & Condiciones</div>
+      <div class="client-header">
+        <div class="client-name">
+          <span class="tecla">F2</span> RIF J-31234567-8 · FERRETERÍA EL TORNILLO, C.A.
+        </div>
+        <div class="client-address">Av. Andrés Bello, Galpón 12, Valencia, Edo. Carabobo</div>
+      </div>
+      <div class="client-grid">
+        <div>
+          <div class="client-item-lbl">Condición</div>
+          <div class="client-item-val">01 Contado (Caja)</div>
+        </div>
+        <div>
+          <div class="client-item-lbl">Vendedor</div>
+          <div class="client-item-val">04 Carlos Mendoza</div>
+        </div>
+        <div>
+          <div class="client-item-lbl">Almacén</div>
+          <div class="client-item-val">ALM-01 Principal Valencia</div>
+        </div>
+        <div>
+          <div class="client-item-lbl">Lista de Precios</div>
+          <div class="client-item-val">P1 Distribuidor USD</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zona C: Entrada rápida de productos -->
+    <div class="capture-section">
+      <span class="tecla">F3</span>
+      <input class="capture-input" placeholder="Código o lector de código de barras [Enter] · Presiona F9 para Cobrar..." disabled value="Última línea agregada: PROD-00215 · Servicio de Calibración Técnica · $50,00 · 1 SRV">
+    </div>
+
+    <!-- Zona D: Grilla de Líneas -->
+    <div class="grid-section">
+      <table class="data-grid">
+        <thead>
+          <tr>
+            <th style="width: 32px;" class="text-center">#</th>
+            <th style="width: 100px;">Código</th>
+            <th>Descripción del Producto / Servicio</th>
+            <th class="text-center" style="width: 50px;">Cant.</th>
+            <th class="text-center" style="width: 45px;">UM</th>
+            <th class="text-right" style="width: 80px;">P. Unit ($)</th>
+            <th class="text-right" style="width: 95px;">P. Unit (Bs)</th>
+            <th class="text-center" style="width: 60px;">Alíc.</th>
+            <th class="text-right" style="width: 90px;">Total ($)</th>
+            <th class="text-right" style="width: 110px;">Total (Bs)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-center text-muted">1</td>
+            <td><strong>PROD-01024</strong></td>
+            <td>Solvente Industrial Dieléctrico Tambor 208L</td>
+            <td class="text-center">2</td>
+            <td class="text-center text-muted">TMB</td>
+            <td class="text-right">185,00</td>
+            <td class="text-right">153.131,90</td>
+            <td class="text-center"><span class="badge-status">16%</span></td>
+            <td class="text-right">370,00</td>
+            <td class="text-right"><strong>306.263,80</strong></td>
+          </tr>
+          <tr>
+            <td class="text-center text-muted">2</td>
+            <td><strong>PROD-08912</strong></td>
+            <td>Desengrasante Biodegradable Bidón 20L</td>
+            <td class="text-center">10</td>
+            <td class="text-center text-muted">BID</td>
+            <td class="text-right">12,50</td>
+            <td class="text-right">10.346,75</td>
+            <td class="text-center"><span class="badge-status">16%</span></td>
+            <td class="text-right">125,00</td>
+            <td class="text-right"><strong>103.467,50</strong></td>
+          </tr>
+          <tr>
+            <td class="text-center text-muted">3</td>
+            <td><strong>PROD-03410</strong></td>
+            <td>Agua Desmineralizada Grado Batería 5L</td>
+            <td class="text-center">4</td>
+            <td class="text-center text-muted">GAL</td>
+            <td class="text-right">24,00</td>
+            <td class="text-right">19.865,76</td>
+            <td class="text-center"><span class="badge-status" style="background:#e6f4ea; color:#137333;">EXENTO</span></td>
+            <td class="text-right">96,00</td>
+            <td class="text-right"><strong>79.463,04</strong></td>
+          </tr>
+          <tr>
+            <td class="text-center text-muted">4</td>
+            <td><strong>PROD-05621</strong></td>
+            <td>Rodamiento Sellado 6204-2RS C3 Industrial</td>
+            <td class="text-center">8</td>
+            <td class="text-center text-muted">PZA</td>
+            <td class="text-right">8,75</td>
+            <td class="text-right">7.242,73</td>
+            <td class="text-center"><span class="badge-status">16%</span></td>
+            <td class="text-right">70,00</td>
+            <td class="text-right"><strong>57.941,80</strong></td>
+          </tr>
+          <tr>
+            <td class="text-center text-muted">5</td>
+            <td><strong>PROD-07119</strong></td>
+            <td>Grasa Lubricante Grado Industrial 400g</td>
+            <td class="text-center">15</td>
+            <td class="text-center text-muted">TUB</td>
+            <td class="text-right">4,20</td>
+            <td class="text-right">3.476,51</td>
+            <td class="text-center"><span class="badge-status">16%</span></td>
+            <td class="text-right">63,00</td>
+            <td class="text-right"><strong>52.147,62</strong></td>
+          </tr>
+          <tr class="active-row">
+            <td class="text-center text-muted">6</td>
+            <td><strong>PROD-00215</strong></td>
+            <td>Servicio de Calibración Técnica Certificada</td>
+            <td class="text-center">1</td>
+            <td class="text-center text-muted">SRV</td>
+            <td class="text-right">50,00</td>
+            <td class="text-right">41.387,00</td>
+            <td class="text-center"><span class="badge-status" style="background:#fef3d6; color:#9a5b00;">8% RED</span></td>
+            <td class="text-right">50,00</td>
+            <td class="text-right"><strong>41.387,00</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Barra Inferior de Fase Carga -->
+    <div class="carga-bottom-bar">
+      <div class="carga-stat">
+        <span>6 líneas · <strong>40 unidades</strong></span>
+      </div>
+      <div class="carga-stat">
+        <span>Subtotal: <strong>561.207,72 Bs</strong></span>
+      </div>
+      <div class="carga-stat">
+        <span>IVA: <strong>86.482,28 Bs</strong></span>
+      </div>
+      <div class="carga-stat">
+        <span>Exento: <strong>79.463,04 Bs</strong></span>
+      </div>
+      
+      <div class="total-preview">
+        <div class="total-preview-bs">Bs. 727.153,04</div>
+        <div class="total-preview-usd">Ref. $878,48 USD (Sin IGTF)</div>
+      </div>
+
+      <button class="btn-cobrar">
+        Cobrar <span class="tecla-inv">F9</span>
+      </button>
+    </div>
+
+    <!-- Zona F: Atajos -->
+    <div class="shortcuts-bar">
+      <div class="shortcut-item"><span class="tecla">F2</span> Cliente</div>
+      <div class="shortcut-item"><span class="tecla">F3</span> Captura Ítem</div>
+      <div class="shortcut-item"><span class="tecla">F4</span> Editar Línea</div>
+      <div class="shortcut-item"><span class="tecla">F7</span> Descuento</div>
+      <div class="shortcut-item"><span class="tecla">F9</span> Cobrar</div>
+      <div class="shortcut-item"><span class="tecla">Esc</span> Salir</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
