@@ -1,46 +1,53 @@
-﻿<!DOCTYPE html>
-<html lang="es" data-theme="dark">
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevLog • Bitácora de Avances Diarios</title>
-  <meta name="description" content="Registro diario de avances del proyecto con capturas de pantalla, notas técnicas y estados de desarrollo.">
-  
-  <!-- Google Fonts -->
+  <title>Nexus Facturación · Bitácora de Avances</title>
+  <meta name="description"
+    content="Registro cronológico y capturas técnicas del desarrollo del sistema Nexus Facturación.">
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <!-- Background Ambient Glows -->
-  <div class="glow-bg glow-1"></div>
-  <div class="glow-bg glow-2"></div>
-
-  <!-- Header -->
+  <!-- Navbar -->
   <header class="navbar">
     <div class="container nav-content">
       <div class="brand">
-        <div class="brand-badge"><i class="fa-solid fa-code-branch"></i></div>
+        <div class="brand-badge"><i class="fa-solid fa-file-invoice-dollar"></i></div>
         <div class="brand-text">
-          <span class="brand-title">DevLog <span class="accent-dot">.</span></span>
-          <span class="brand-subtitle">Bitácora de Avances</span>
+          <span class="brand-title">Nexus Facturación</span>
+          <span class="brand-subtitle">Bitácora de Ingeniería</span>
         </div>
       </div>
 
       <div class="nav-actions">
-        <button id="viewToggleBtn" class="btn btn-secondary" title="Cambiar vista (Timeline / Cuadrícula)">
+        <a href="assets/preview-factura-proquimicos.html" target="_blank" class="btn btn-secondary btn-sm"
+          title="Ver maqueta interactiva">
+          <i class="fa-regular fa-window-restore"></i>
+          <span>Maqueta Caja [PROQUIMICOS]</span>
+        </a>
+
+        <button id="viewToggleBtn" class="btn btn-secondary btn-sm" title="Cambiar vista (Timeline / Cuadrícula)">
           <i class="fa-solid fa-timeline" id="viewToggleIcon"></i>
           <span class="btn-text" id="viewToggleText">Timeline</span>
         </button>
 
-        <button id="themeToggleBtn" class="btn btn-icon" title="Cambiar tema">
-          <i class="fa-solid fa-moon" id="themeIcon"></i>
+        <button id="themeToggleBtn" class="btn btn-icon btn-sm" title="Cambiar tema">
+          <i class="fa-solid fa-sun" id="themeIcon"></i>
         </button>
       </div>
     </div>
@@ -53,9 +60,10 @@
         <span class="pulse-dot"></span>
         <span id="postsCountBadge">Cargando avances...</span>
       </div>
-      <h1 class="hero-title">Registro Diario de <span class="gradient-text">Avances & Capturas</span></h1>
+      <h1 class="hero-title">Registro de Avances & Capturas</h1>
       <p class="hero-description">
-        Seguimiento cronológico del desarrollo del proyecto. Cada día documenta objetivos cumplidos, decisiones técnicas y capturas de pantalla de la evolución del sistema.
+        Documentación técnica de objetivos completados, decisiones de arquitectura, modelo de datos y capturas del
+        sistema Nexus Facturación.
       </p>
 
       <!-- Stats Bar -->
@@ -64,14 +72,21 @@
           <div class="stat-icon"><i class="fa-regular fa-calendar-check"></i></div>
           <div class="stat-info">
             <span class="stat-value" id="statDaysCount">0</span>
-            <span class="stat-label">Días Registrados</span>
+            <span class="stat-label">Avances Registrados</span>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon"><i class="fa-solid fa-images"></i></div>
           <div class="stat-info">
             <span class="stat-value" id="statScreenshotsCount">0</span>
-            <span class="stat-label">Capturas Subidas</span>
+            <span class="stat-label">Capturas Técnicas</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-cubes-stacked"></i></div>
+          <div class="stat-info">
+            <span class="stat-value">v0.2.0</span>
+            <span class="stat-label">Versión del Sistema</span>
           </div>
         </div>
       </div>
@@ -84,7 +99,7 @@
       <div class="controls-bar">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="searchInput" placeholder="Buscar por título, objetivo o descripción...">
+          <input type="text" id="searchInput" placeholder="Buscar por título, objetivo, tecnologías o módulo...">
           <button id="clearSearchBtn" class="clear-btn" style="display:none;"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
@@ -112,10 +127,11 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container footer-content">
-      <p>© 2026 <strong>DevLog</strong> • Listo para sincronizar con GitHub Pages</p>
+      <p>© 2026 <strong>Nexus Facturación</strong> · Sistema Administrativo & Fiscal</p>
       <div class="footer-links">
-        <a href="README.md" target="_blank"><i class="fa-solid fa-book"></i> Guía de Uso</a>
-        <a href="https://github.com" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> Repositorio</a>
+        <a href="assets/preview-factura-proquimicos.html" target="_blank"><i
+            class="fa-solid fa-arrow-up-right-from-square"></i> Maqueta en Vivo</a>
+        <a href="README.md" target="_blank"><i class="fa-solid fa-book"></i> Documentación</a>
       </div>
     </div>
   </footer>
@@ -124,126 +140,22 @@
   <div id="lightboxModal" class="lightbox-modal" aria-hidden="true">
     <div class="lightbox-overlay" id="lightboxOverlay"></div>
     <div class="lightbox-content">
-      <button class="lightbox-close" id="lightboxCloseBtn" title="Cerrar (Esc)"><i class="fa-solid fa-xmark"></i></button>
-      <button class="lightbox-nav lightbox-prev" id="lightboxPrevBtn" title="Anterior (Flecha Izq)"><i class="fa-solid fa-chevron-left"></i></button>
-      
+      <button class="lightbox-close" id="lightboxCloseBtn" title="Cerrar (Esc)"><i
+          class="fa-solid fa-xmark"></i></button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrevBtn" title="Anterior (Flecha Izq)"><i
+          class="fa-solid fa-chevron-left"></i></button>
+
       <div class="lightbox-image-wrapper">
         <img id="lightboxImg" src="" alt="Captura ampliada">
       </div>
       <div class="lightbox-caption" id="lightboxCaption"></div>
 
-      <button class="lightbox-nav lightbox-next" id="lightboxNextBtn" title="Siguiente (Flecha Der)"><i class="fa-solid fa-chevron-right"></i></button>
+      <button class="lightbox-nav lightbox-next" id="lightboxNextBtn" title="Siguiente (Flecha Der)"><i
+          class="fa-solid fa-chevron-right"></i></button>
     </div>
-  </div>
-
-  <!-- Modal: Creador / Asistente de Nueva Entrada -->
-  <div id="newPostModal" class="creator-modal" aria-hidden="true">
-    <div class="modal-overlay" id="newPostOverlay"></div>
-    <div class="modal-container">
-      <div class="modal-header">
-        <div class="modal-header-title">
-          <div class="modal-icon"><i class="fa-solid fa-pen-nib"></i></div>
-          <div>
-            <h2>Nuevo Avance Diario</h2>
-            <p>Genera la información de tu día y cópiala a <code>data/posts.json</code></p>
-          </div>
-        </div>
-        <button class="modal-close" id="closeNewPostModalBtn"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      <form id="newPostForm" class="modal-body">
-        <div class="form-row two-cols">
-          <div class="form-group">
-            <label for="postDayNumber">Número de Día / Versión</label>
-            <input type="number" id="postDayNumber" min="1" placeholder="Ej: 3" required>
-          </div>
-          <div class="form-group">
-            <label for="postDate">Fecha</label>
-            <input type="date" id="postDate" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="postTitle">Título del Avance</label>
-          <input type="text" id="postTitle" placeholder="Ej: Implementación de autenticación y panel de usuarios" required>
-        </div>
-
-        <div class="form-row two-cols">
-          <div class="form-group">
-            <label for="postCategory">Categoría</label>
-            <input type="text" id="postCategory" placeholder="Ej: Frontend / Backend / Base de datos" required>
-          </div>
-          <div class="form-group">
-            <label for="postTags">Etiquetas (separadas por comas)</label>
-            <input type="text" id="postTags" placeholder="UI, React, Auth, API" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="postSummary">Resumen General</label>
-          <textarea id="postSummary" rows="2" placeholder="Describe brevemente qué se logró en la jornada..." required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="postHighlights">Logros / Tareas Clave (Uno por línea)</label>
-          <textarea id="postHighlights" rows="3" placeholder="Se agregó el login con JWT&#10;Se optimizaron las consultas SQL&#10;Se corrigió el error de carga en móviles" required></textarea>
-        </div>
-
-        <!-- Capturas -->
-        <div class="form-group">
-          <label>Capturas de Pantalla (Ruta local o URL)</label>
-          <div class="helper-text">
-            <i class="fa-solid fa-circle-info"></i> Puedes guardar tus capturas en <code>assets/uploads/tu-captura.png</code> o usar una URL pública.
-          </div>
-          
-          <div id="screenshotsList" class="screenshots-input-list">
-            <div class="screenshot-input-row">
-              <input type="text" class="ss-url-input" placeholder="Ruta: assets/uploads/dia3-1.png ó URL" required>
-              <input type="text" class="ss-caption-input" placeholder="Descripción de la captura">
-              <button type="button" class="btn btn-icon remove-ss-btn" style="visibility:hidden;"><i class="fa-solid fa-trash"></i></button>
-            </div>
-          </div>
-          <button type="button" id="addScreenshotBtn" class="btn btn-secondary btn-sm" style="margin-top: 8px;">
-            <i class="fa-solid fa-plus"></i> Agregar otra captura
-          </button>
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" id="previewPostBtn" class="btn btn-secondary">
-            <i class="fa-regular fa-eye"></i> Previsualizar en la página
-          </button>
-          <button type="submit" class="btn btn-primary">
-            <i class="fa-solid fa-code"></i> Generar & Copiar JSON
-          </button>
-          <button type="button" id="downloadJsonBtn" class="btn btn-accent">
-            <i class="fa-solid fa-download"></i> Descargar posts.json
-          </button>
-        </div>
-
-        <!-- JSON Output Section -->
-        <div id="jsonOutputSection" class="json-output-section" style="display:none;">
-          <div class="json-header">
-            <span><i class="fa-solid fa-circle-check"></i> JSON generado con éxito:</span>
-            <button type="button" id="copyJsonBtn" class="btn btn-sm btn-secondary">
-              <i class="fa-regular fa-copy"></i> Copiar
-            </button>
-          </div>
-          <pre id="jsonPreviewCode"><code></code></pre>
-          <p class="json-instructions">
-            💡 Pega este fragmento al inicio del archivo <code>data/posts.json</code> y haz <code>git commit</code> para publicarlo.
-          </p>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toastNotification" class="toast">
-    <i class="fa-solid fa-check-circle toast-icon"></i>
-    <span id="toastMessage">Acción completada</span>
   </div>
 
   <script src="app.js"></script>
 </body>
-</html>
 
+</html>

@@ -1,5 +1,6 @@
-﻿/**
- * DevLog - Lógica de la Bitácora de Avances
+/**
+ * Nexus Facturación - Visor de Bitácora y Avances de Desarrollo
+ * Modo Solo Lectura (Público / Clientes / Stakeholders)
  */
 
 const state = {
@@ -12,6 +13,33 @@ const state = {
 };
 
 const FALLBACK_POSTS = [
+  {
+    "id": "avance-3",
+    "date": "2026-09-22",
+    "dayNumber": 3,
+    "title": "Arquitectura de Backend: Sistema RBAC de Roles, Pooler PgBouncer y Seguridad RLS",
+    "category": "Backend & Infraestructura DB",
+    "tags": [
+      "PostgreSQL",
+      "RLS",
+      "RBAC",
+      "Seguridad",
+      "Supabase Pooler",
+      "Auth.js",
+      "Server Actions",
+      "Auditoría"
+    ],
+    "summary": "Consolidación integral de la capa de backend: arquitectura de roles y permisos (RBAC), endurecimiento de políticas RLS multi-tenant en PostgreSQL, gestión de transacciones concurrentes con pooler de conexiones y logs de auditoría inmutables.",
+    "highlights": [
+      "Matriz de Roles y Permisos (RBAC): Configuración de roles de Administrador, Supervisor de Caja, Cajero/Operador y Auditor con validación a nivel de middleware y base de datos",
+      "Aislamiento RLS Multi-Tenant: Políticas RLS estrictas en PostgreSQL basadas en empresa_id y sucursal_id con bloqueo total de fugas entre empresas",
+      "Contexto de Sesión conTenant(): Inyección atómica de SET LOCAL app.current_tenant y SET LOCAL app.current_user para transacciones de cobro y emisión",
+      "Optimización del Connection Pooler: Configuración en Transaction Mode con PgBouncer para garantizar alta concurrencia en múltiples cajas simultáneas",
+      "Trazabilidad y Auditoría (audit_logs): Tabla inmutable de logs para registrar cada creación, anulación, cobro con IGTF y ajuste de inventario",
+      "Guardias de Server Actions: Validación de esquemas con Zod y verificación de claims de sesión antes de ejecutar mutaciones críticas"
+    ],
+    "screenshots": []
+  },
   {
     "id": "dia-2",
     "date": "2026-09-20",
@@ -54,8 +82,7 @@ const FALLBACK_POSTS = [
         "url": "assets/uploads/nexus-factura-modulo-cobro.png",
         "caption": "Módulo de Cobro: Formas de pago (Transferencia), desglose fiscal de base imponible, IVA 16% y saldo cuadrado"
       }
-    ],
-    "author": "Daniel"
+    ]
   },
   {
     "id": "dia-1",
@@ -84,14 +111,13 @@ const FALLBACK_POSTS = [
         "url": "assets/uploads/login-caja-nexus-claro.png",
         "caption": "Maqueta de interfaz de Login Caja Nexus en Modo Claro"
       }
-    ],
-    "author": "Daniel"
+    ]
   }
 ];
 
+// Elementos DOM
 const postsContainer = document.getElementById('postsContainer');
 const emptyState = document.getElementById('emptyState');
-const tagsFilterContainer = document.getElementById('tagsFilterContainer');
 const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const viewToggleBtn = document.getElementById('viewToggleBtn');
@@ -102,7 +128,6 @@ const themeIcon = document.getElementById('themeIcon');
 const postsCountBadge = document.getElementById('postsCountBadge');
 const statDaysCount = document.getElementById('statDaysCount');
 const statScreenshotsCount = document.getElementById('statScreenshotsCount');
-const statTagsCount = document.getElementById('statTagsCount');
 const resetFiltersBtn = document.getElementById('resetFiltersBtn');
 
 const lightboxModal = document.getElementById('lightboxModal');
@@ -113,53 +138,31 @@ const lightboxCloseBtn = document.getElementById('lightboxCloseBtn');
 const lightboxPrevBtn = document.getElementById('lightboxPrevBtn');
 const lightboxNextBtn = document.getElementById('lightboxNextBtn');
 
-const newPostModal = document.getElementById('newPostModal');
-const newPostOverlay = document.getElementById('newPostOverlay');
-const openNewPostModalBtn = document.getElementById('openNewPostModalBtn');
-const closeNewPostModalBtn = document.getElementById('closeNewPostModalBtn');
-const newPostForm = document.getElementById('newPostForm');
-const addScreenshotBtn = document.getElementById('addScreenshotBtn');
-const screenshotsList = document.getElementById('screenshotsList');
-const previewPostBtn = document.getElementById('previewPostBtn');
-const downloadJsonBtn = document.getElementById('downloadJsonBtn');
-const jsonOutputSection = document.getElementById('jsonOutputSection');
-const jsonPreviewCode = document.getElementById('jsonPreviewCode');
-const copyJsonBtn = document.getElementById('copyJsonBtn');
-const toastNotification = document.getElementById('toastNotification');
-const toastMessage = document.getElementById('toastMessage');
-
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadPosts();
   setupEventListeners();
-  setDefaultFormValues();
 });
 
 async function loadPosts() {
   try {
-    const res = await fetch('data/posts.json');
+    const res = await fetch('data/posts.json?v=' + Date.now());
     if (!res.ok) throw new Error('No se pudo cargar posts.json');
     const data = await res.json();
-    state.posts = Array.isArray(data) ? data : FALLBACK_POSTS;
+    state.posts = Array.isArray(data) && data.length > 0 ? data : FALLBACK_POSTS;
   } catch (err) {
-    console.warn('Cargando datos fallback locales:', err);
+    console.warn('Cargando datos locales garantizados:', err);
     state.posts = FALLBACK_POSTS;
-  }
-
-  const localDrafts = JSON.parse(localStorage.getItem('devlog_local_drafts') || '[]');
-  if (localDrafts.length > 0) {
-    state.posts = [...localDrafts, ...state.posts];
   }
 
   state.posts.sort((a, b) => (b.dayNumber || 0) - (a.dayNumber || 0));
 
   updateStats();
-  renderTags();
   renderPosts();
 }
 
 function updateStats() {
-  const totalDays = state.posts.length;
+  const totalPosts = state.posts.length;
   let totalScreenshots = 0;
 
   state.posts.forEach(post => {
@@ -168,15 +171,9 @@ function updateStats() {
     }
   });
 
-  if (postsCountBadge) postsCountBadge.textContent = totalDays + (totalDays === 1 ? ' avance registrado' : ' avances registrados');
-  if (statDaysCount) statDaysCount.textContent = totalDays;
+  if (postsCountBadge) postsCountBadge.textContent = totalPosts + (totalPosts === 1 ? ' avance registrado' : ' avances registrados');
+  if (statDaysCount) statDaysCount.textContent = totalPosts;
   if (statScreenshotsCount) statScreenshotsCount.textContent = totalScreenshots;
-  if (statTagsCount) statTagsCount.textContent = '0';
-}
-
-function renderTags() {
-  if (!tagsFilterContainer) return;
-  tagsFilterContainer.innerHTML = '';
 }
 
 function renderPosts() {
@@ -189,9 +186,10 @@ function renderPosts() {
     const inTitle = (post.title || '').toLowerCase().includes(query);
     const inSummary = (post.summary || '').toLowerCase().includes(query);
     const inCategory = (post.category || '').toLowerCase().includes(query);
+    const inTags = (post.tags || []).some(t => t.toLowerCase().includes(query));
     const inHighlights = (post.highlights || []).some(h => h.toLowerCase().includes(query));
 
-    return matchesTag && (inTitle || inSummary || inCategory || inHighlights);
+    return matchesTag && (inTitle || inSummary || inCategory || inTags || inHighlights);
   });
 
   if (filtered.length === 0) {
@@ -205,7 +203,7 @@ function renderPosts() {
 
   postsContainer.innerHTML = filtered.map(post => {
     const highlightsHtml = post.highlights && post.highlights.length > 0 ? 
-      '<div class="highlights-block"><div class="highlights-title"><i class="fa-solid fa-list-check"></i> Logros & Tareas del Día</div><ul class="highlights-list">' +
+      '<div class="highlights-block"><div class="highlights-title"><i class="fa-solid fa-list-check"></i> Logros & Tareas Realizadas</div><ul class="highlights-list">' +
       post.highlights.map(item => '<li><i class="fa-solid fa-check"></i> <span>' + item + '</span></li>').join('') +
       '</ul></div>' : '';
 
@@ -226,12 +224,14 @@ function renderPosts() {
       post.tags.map(t => '<span class="post-tag">#' + t + '</span>').join('') +
       '</div>' : '';
 
+    const footerHtml = tagsHtml ? '<footer class="post-footer">' + tagsHtml + '</footer>' : '';
+
     return '<article class="timeline-item" id="post-' + post.id + '">' +
       '<div class="timeline-node"></div>' +
       '<div class="post-card">' +
         '<header class="post-header">' +
           '<div class="post-meta-left">' +
-            '<span class="day-badge">DÍA ' + (post.dayNumber || 0) + '</span>' +
+            '<span class="day-badge">AVANCE #' + (post.dayNumber || 0) + '</span>' +
             '<span class="date-text"><i class="fa-regular fa-calendar"></i> ' + formatDate(post.date) + '</span>' +
             (post.category ? '<span class="post-category">' + post.category + '</span>' : '') +
           '</div>' +
@@ -240,9 +240,7 @@ function renderPosts() {
         '<p class="post-summary">' + post.summary + '</p>' +
         highlightsHtml +
         screenshotsHtml +
-        '<footer class="post-footer">' +
-          '<div class="post-author"><i class="fa-regular fa-user"></i> ' + (post.author || 'Daniel') + '</div>' +
-        '</footer>' +
+        footerHtml +
       '</div>' +
     '</article>';
   }).join('');
@@ -311,17 +309,6 @@ function prevLightbox() {
 }
 
 function setupEventListeners() {
-  if (tagsFilterContainer) {
-    tagsFilterContainer.addEventListener('click', (e) => {
-      const btn = e.target.closest('.tag-btn');
-      if (!btn) return;
-      state.currentTag = btn.getAttribute('data-tag');
-      document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderPosts();
-    });
-  }
-
   searchInput.addEventListener('input', (e) => {
     state.searchQuery = e.target.value;
     clearSearchBtn.style.display = state.searchQuery ? 'block' : 'none';
@@ -340,7 +327,6 @@ function setupEventListeners() {
     state.searchQuery = '';
     clearSearchBtn.style.display = 'none';
     state.currentTag = 'all';
-    renderTags();
     renderPosts();
   });
 
@@ -375,158 +361,19 @@ function setupEventListeners() {
       if (e.key === 'ArrowRight') nextLightbox();
       if (e.key === 'ArrowLeft') prevLightbox();
     }
-    if (newPostModal.classList.contains('active') && e.key === 'Escape') {
-      closeNewPostModal();
-    }
   });
-
-  if (openNewPostModalBtn) openNewPostModalBtn.addEventListener('click', openNewPostModal);
-  closeNewPostModalBtn.addEventListener('click', closeNewPostModal);
-  newPostOverlay.addEventListener('click', closeNewPostModal);
-
-  addScreenshotBtn.addEventListener('click', () => addScreenshotInputRow());
-
-  newPostForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const newPost = buildPostObjectFromForm();
-    const jsonStr = JSON.stringify(newPost, null, 2);
-    jsonPreviewCode.querySelector('code').textContent = jsonStr;
-    jsonOutputSection.style.display = 'block';
-    
-    navigator.clipboard.writeText(jsonStr).then(() => {
-      showToast('¡JSON copiado al portapapeles!');
-    }).catch(() => {
-      showToast('JSON generado correctamente');
-    });
-  });
-
-  copyJsonBtn.addEventListener('click', () => {
-    const code = jsonPreviewCode.querySelector('code').textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      showToast('¡Copiado al portapapeles!');
-    });
-  });
-
-  previewPostBtn.addEventListener('click', () => {
-    const newPost = buildPostObjectFromForm();
-    const localDrafts = JSON.parse(localStorage.getItem('devlog_local_drafts') || '[]');
-    localDrafts.unshift(newPost);
-    localStorage.setItem('devlog_local_drafts', JSON.stringify(localDrafts));
-    
-    state.posts.unshift(newPost);
-    updateStats();
-    renderTags();
-    renderPosts();
-    closeNewPostModal();
-    showToast('Avance previsualizado y guardado localmente');
-    window.scrollTo({ top: 400, behavior: 'smooth' });
-  });
-
-  downloadJsonBtn.addEventListener('click', () => {
-    const newPost = buildPostObjectFromForm();
-    const fullPostsArray = [newPost, ...state.posts];
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullPostsArray, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "posts.json");
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast('Descargando posts.json actualizado...');
-  });
-}
-
-function setDefaultFormValues() {
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('postDate').value = today;
-  
-  const nextDayNum = state.posts.length > 0 
-    ? Math.max(...state.posts.map(p => p.dayNumber || 0)) + 1 
-    : 1;
-  document.getElementById('postDayNumber').value = nextDayNum;
-}
-
-function openNewPostModal() {
-  setDefaultFormValues();
-  newPostModal.classList.add('active');
-  newPostModal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeNewPostModal() {
-  newPostModal.classList.remove('active');
-  newPostModal.setAttribute('aria-hidden', 'true');
-  document.body.style.overflow = '';
-}
-
-function addScreenshotInputRow() {
-  const row = document.createElement('div');
-  row.className = 'screenshot-input-row';
-  row.innerHTML = 
-    '<input type="text" class="ss-url-input" placeholder="Ruta: assets/uploads/captura.png ó URL" required>' +
-    '<input type="text" class="ss-caption-input" placeholder="Descripción de la captura">' +
-    '<button type="button" class="btn btn-icon remove-ss-btn" title="Eliminar captura"><i class="fa-solid fa-trash"></i></button>';
-  row.querySelector('.remove-ss-btn').addEventListener('click', () => row.remove());
-  screenshotsList.appendChild(row);
-}
-
-function buildPostObjectFromForm() {
-  const dayNumber = parseInt(document.getElementById('postDayNumber').value, 10) || 1;
-  const date = document.getElementById('postDate').value;
-  const title = document.getElementById('postTitle').value.trim();
-  const category = document.getElementById('postCategory').value.trim();
-  const tags = document.getElementById('postTags').value
-    .split(',')
-    .map(t => t.trim())
-    .filter(t => t.length > 0);
-  const summary = document.getElementById('postSummary').value.trim();
-  const highlights = document.getElementById('postHighlights').value
-    .split('\n')
-    .map(h => h.trim())
-    .filter(h => h.length > 0);
-
-  const screenshots = [];
-  document.querySelectorAll('.screenshot-input-row').forEach(row => {
-    const url = row.querySelector('.ss-url-input').value.trim();
-    const caption = row.querySelector('.ss-caption-input').value.trim();
-    if (url) {
-      screenshots.push({ url, caption: caption || title });
-    }
-  });
-
-  return {
-    id: 'dia-' + dayNumber + '-' + Date.now(),
-    date,
-    dayNumber,
-    title,
-    category,
-    tags,
-    summary,
-    highlights,
-    screenshots,
-    author: 'Daniel'
-  };
-}
-
-function showToast(msg) {
-  toastMessage.textContent = msg;
-  toastNotification.classList.add('show');
-  setTimeout(() => {
-    toastNotification.classList.remove('show');
-  }, 3500);
 }
 
 function initTheme() {
-  const savedTheme = localStorage.getItem('devlog_theme') || 'dark';
+  const savedTheme = localStorage.getItem('devlog_theme') || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   updateThemeIcon(savedTheme);
 }
 
 function updateThemeIcon(theme) {
   if (theme === 'dark') {
-    themeIcon.className = 'fa-solid fa-moon';
-  } else {
     themeIcon.className = 'fa-solid fa-sun';
+  } else {
+    themeIcon.className = 'fa-solid fa-moon';
   }
 }
-

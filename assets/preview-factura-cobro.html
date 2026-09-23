@@ -6,372 +6,453 @@
   <title>Fase 2: Cobro y Cierre Fiscal · FAC-00048912 · PROQUIMICOS, C.A.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --color-surface: #ffffff;
-      --color-surface-2: #f1f3f5;
-      --color-surface-3: #e9ecef;
-      --color-surface-read: #f9fafb;
-      --color-border: #d0d5dd;
-      --color-border-subtle: #e4e7ec;
-      --color-text: #101828;
-      --color-text-2: #475467;
-      --color-text-3: #667085;
-      --color-marca: #b9603a;
-      --color-marca-hover: #a5522f;
-      --color-accent: #1570ef;
-      --color-accent-fill: #eff8ff;
-      --color-success: #067647;
-      --color-warning: #b54708;
-      --color-danger: #b42318;
-      --empresa-color: #4c2a85; /* Proquímicos Violeta */
+      --bg-canvas: #ffffff;
+      --bg-subtle: #f8fafc;
+      --bg-muted: #f1f5f9;
+      --border-color: #e2e8f0;
+      --border-dark: #cbd5e1;
+      --text-main: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --primary-subtle: #e0f2fe;
+      --success: #15803d;
+      --success-bg: #f0fdf4;
+      --warning: #b45309;
+      --warning-bg: #fffbeb;
+      --danger: #b91c1c;
+      --danger-bg: #fef2f2;
+      --header-bg: #0f172a;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: var(--color-surface-2);
-      color: var(--color-text);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      font-size: 12px;
-      line-height: 1.25;
+      background: var(--bg-canvas);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 12.5px;
+      line-height: 1.4;
       font-feature-settings: "tnum" 1, "cv05" 1;
       font-variant-numeric: tabular-nums;
-      padding: 24px 16px;
-      display: flex;
-      justify-content: center;
+      min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
 
-    .window-card {
+    .erp-container {
       width: 100%;
-      max-width: 1120px;
-      background: var(--color-surface);
-      border: 1px solid var(--color-border);
-      border-radius: 8px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      overflow: hidden;
+      max-width: 1280px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-top: none;
     }
 
-    /* Zona A */
-    .company-bar {
-      background: var(--empresa-color);
+    .app-header {
+      background: var(--header-bg);
       color: #ffffff;
-      padding: 6px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 11px;
-    }
-    .company-title { font-weight: 600; font-size: 12.5px; }
-    .company-meta { opacity: 0.88; font-size: 11px; }
-    .company-dot { opacity: 0.45; }
-
-    .doc-tabs-bar {
-      padding: 10px 14px 6px;
-      border-bottom: 1px solid var(--color-border-subtle);
+      padding: 9px 18px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
+      border-bottom: 1px solid #1e293b;
     }
-    .tabs { display: flex; gap: 16px; }
-    .tab {
-      padding-bottom: 6px;
+
+    .app-brand { display: flex; align-items: center; gap: 12px; }
+    .company-tag { font-size: 13px; font-weight: 700; color: #ffffff; }
+    .company-rif {
+      background: #1e293b;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid #334155;
+    }
+
+    .header-context { display: flex; align-items: center; gap: 14px; font-size: 11.5px; color: #94a3b8; }
+    .header-context span.highlight { color: #e2e8f0; font-weight: 500; }
+    .header-divider { color: #334155; }
+
+    .bcv-pill {
+      background: rgba(2, 132, 199, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bcv-dot { width: 6px; height: 6px; border-radius: 50%; background: #38bdf8; }
+
+    .doc-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .doc-types { display: flex; gap: 2px; }
+    .doc-tab {
+      padding: 10px 16px;
       font-size: 12px;
       font-weight: 500;
-      color: var(--color-text-3);
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
     }
-    .tab.active {
-      color: var(--color-text);
+    .doc-tab.active {
+      color: var(--primary);
       font-weight: 600;
-      border-bottom: 2px solid var(--color-accent);
+      border-bottom-color: var(--primary);
+      background: #f8fafc;
     }
-    .doc-meta {
+    .doc-identifiers { display: flex; align-items: center; gap: 12px; font-size: 12px; }
+    .doc-num { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--text-main); }
+    
+    .phase-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #0369a1;
+      background: #e0f2fe;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #bae6fd;
+    }
+
+    .meta-panel {
+      padding: 12px 18px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .customer-title {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 11px;
-      color: var(--color-text-3);
-      padding: 4px 14px 8px;
-      border-bottom: 1px solid var(--color-border-subtle);
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
     }
-    .doc-meta strong { color: var(--color-text); font-weight: 600; }
-    .badge-status {
-      background: var(--color-surface-3);
-      color: var(--color-text-2);
+    .customer-rif {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-muted);
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 11.5px;
+    }
+    .customer-address { font-size: 11.5px; color: var(--text-muted); }
+
+    .key-badge {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 10px;
       font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 4px;
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-bottom: 2px solid var(--border-dark);
+      color: var(--text-secondary);
+      padding: 1px 5px;
+      border-radius: 3px;
     }
 
-    /* Zona B */
-    .client-section {
-      padding: 8px 14px;
-      border-bottom: 1px solid var(--color-border-subtle);
-      background: #fafbfc;
-    }
-    .section-title {
-      font-size: 10.5px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-text-3);
-      margin-bottom: 4px;
-    }
-    .client-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .tecla {
-      display: inline-block;
-      background: var(--color-surface-3);
-      border: 1px solid var(--color-border);
-      border-radius: 3px;
-      padding: 1px 5px;
-      font-size: 9.5px;
-      font-weight: 600;
-      color: var(--color-text-2);
-      margin-right: 4px;
-    }
-    .tecla-inv {
-      display: inline-block;
-      background: rgba(255,255,255,0.25);
-      border-radius: 3px;
-      padding: 1px 5px;
-      font-size: 9.5px;
-      font-weight: 600;
-      color: #ffffff;
-      margin-left: 6px;
-    }
-    .client-name { font-size: 12.5px; font-weight: 600; color: var(--color-text); }
-    .client-address { font-size: 11px; color: var(--color-text-2); }
-
-    /* Zona E: Desglose de Pagos y Resumen Fiscal en Gran Detalle */
-    .summary-split {
+    /* Módulo de Cobro */
+    .settlement-panel {
       display: grid;
-      grid-template-columns: 56% 44%;
-      background: var(--color-surface);
+      grid-template-columns: 58% 42%;
+      background: #ffffff;
+      min-height: 480px;
     }
-    .payments-box {
-      padding: 14px 18px;
-      border-right: 1px solid var(--color-border);
+
+    .payments-section {
+      padding: 18px;
+      border-right: 1px solid var(--border-color);
       background: #ffffff;
     }
+
+    .section-heading {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
     .payments-pills {
       display: flex;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
-    .pill {
+    .payment-pill {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
       padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid var(--color-border);
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--color-text-2);
-    }
-    .pill.active {
-      border-color: var(--color-accent);
-      background: var(--color-accent-fill);
-      color: var(--color-accent);
+      border-radius: 4px;
+      font-size: 12px;
       font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .pill .tag-igtf {
-      font-size: 9px;
-      color: var(--color-warning);
-      display: block;
-      font-weight: 600;
+    .payment-pill.active {
+      border-color: var(--primary);
+      background: #f0f9ff;
+      color: #0369a1;
     }
 
-    .payments-table {
+    table.payments-grid {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 6px;
-      font-size: 11.5px;
+      font-size: 12px;
     }
-    .payments-table th {
-      font-size: 10px;
+    table.payments-grid th {
+      font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      color: var(--color-text-3);
-      padding: 6px 8px;
-      border-bottom: 1px solid var(--color-border);
+      letter-spacing: 0.02em;
+      color: var(--text-muted);
+      padding: 7px 10px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
       text-align: left;
-      background: var(--color-surface-3);
     }
-    .payments-table td {
-      padding: 7px 8px;
-      border-bottom: 1px solid var(--color-border-subtle);
+    table.payments-grid td {
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
     }
-    .payment-tag-igtf {
-      background: #fff4ed;
-      color: var(--color-warning);
-      border: 1px solid #ffd6ae;
-      font-size: 9px;
+
+    .igtf-tag {
+      background: var(--warning-bg);
+      color: var(--warning);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
       font-weight: 600;
       padding: 1px 4px;
       border-radius: 3px;
+      border: 1px solid #fde68a;
       margin-left: 4px;
     }
 
     .balance-status-bar {
       margin-top: 14px;
       padding: 10px 14px;
-      background: #f6fef9;
-      border: 1px solid #b7eed0;
-      border-radius: 6px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 11.5px;
+      font-size: 12px;
     }
-    .balance-status-bar strong { color: var(--color-success); font-weight: 600; }
 
-    .fiscal-box {
-      padding: 16px 20px;
+    .balance-ok {
+      color: var(--success);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Caja Fiscal */
+    .fiscal-summary-box {
+      padding: 18px 22px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: #fafbfc;
+      background: var(--bg-subtle);
     }
-    .fiscal-lines {
+
+    .fiscal-rows {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      font-size: 11.5px;
+      font-size: 12px;
     }
-    .fiscal-row {
+
+    .fiscal-line {
       display: flex;
       justify-content: space-between;
-      color: var(--color-text-2);
-      padding: 2px 0;
+      color: var(--text-secondary);
     }
-    .fiscal-row strong { color: var(--color-text); font-weight: 600; }
-    .total-box {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 2px solid var(--color-border);
+
+    .fiscal-line span.val {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .fiscal-line.igtf-line {
+      color: var(--warning);
+      background: #fffbeb;
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #fde68a;
+    }
+
+    .grand-total-card {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 2px solid var(--border-dark);
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: baseline;
     }
-    .total-label { font-size: 13px; font-weight: 700; text-transform: uppercase; color: var(--color-text); }
-    .total-amount-bs {
-      font-size: 26px;
+
+    .total-title {
+      font-size: 13px;
       font-weight: 700;
-      color: var(--color-text);
-      letter-spacing: -0.02em;
-      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-main);
     }
-    .total-amount-usd {
+
+    .total-ref-usd {
+      font-family: 'JetBrains Mono', monospace;
       font-size: 13.5px;
       font-weight: 600;
-      color: var(--color-text-3);
-      text-align: right;
-      margin-top: 4px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .total-primary-bs {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
     }
 
     .btn-emitir {
+      margin-top: 16px;
       width: 100%;
-      margin-top: 14px;
-      background: var(--color-success);
+      background: #15803d;
       color: #ffffff;
-      border: none;
-      border-radius: 6px;
+      border: 1px solid #166534;
       padding: 10px 18px;
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 700;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      gap: 10px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(6, 118, 71, 0.25);
+    }
+    .btn-emitir:hover { background: #166534; }
+
+    .key-badge-inv {
+      background: rgba(255, 255, 255, 0.25);
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 3px;
     }
 
-    /* Zona F: Barra de Atajos */
-    .shortcuts-bar {
-      background: var(--color-surface-3);
-      padding: 6px 14px;
+    .shortcuts-footer {
+      background: #ffffff;
+      border-top: 1px solid var(--border-color);
+      padding: 8px 18px;
       display: flex;
+      flex-wrap: wrap;
       gap: 16px;
-      font-size: 10.5px;
-      color: var(--color-text-2);
-      border-top: 1px solid var(--color-border);
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-secondary);
     }
-    .shortcut-item { display: flex; align-items: center; }
+    .shortcut-pill { display: inline-flex; align-items: center; gap: 5px; }
   </style>
 </head>
 <body>
 
-  <div class="window-card">
+  <div class="erp-container">
     
-    <!-- Zona A: Empresa Activa -->
-    <div class="company-bar">
-      <span class="company-title">PROQUIMICOS, C.A.</span>
-      <span class="company-meta">RIF J-40123456-7</span>
-      <span class="company-dot">·</span>
-      <span class="company-meta">Sucursal Principal Valencia</span>
-      <span class="company-dot">·</span>
-      <span class="company-meta">Punto: Caja 1 · Serie A</span>
-    </div>
-
-    <div class="doc-tabs-bar">
-      <div class="tabs">
-        <span class="tab active">FACTURA</span>
-        <span class="tab">NOTA DE CRÉDITO</span>
-        <span class="tab">NOTA DE DÉBITO</span>
-        <span class="tab">COTIZACIÓN</span>
-        <span class="tab">NOTA DE ENTREGA</span>
+    <header class="app-header">
+      <div class="app-brand">
+        <div class="company-tag">PROQUIMICOS, C.A.</div>
+        <span class="company-rif">J-40123456-7</span>
       </div>
-      <div style="font-size: 11px; font-weight: 600; color: var(--color-marca); background: #fff4ed; padding: 3px 8px; border-radius: 4px; border: 1px solid #ffd6ae;">
-        [FASE 2: MÓDULO DE COBRO MULTIMONEDA & IGTF]
-      </div>
-    </div>
 
-    <div class="doc-meta">
-      <span><strong>FACTURA FAC-00048912</strong></span>
-      <span>·</span>
-      <span>Control: <strong>00-00892410</strong></span>
-      <span>·</span>
-      <span>Fecha: <strong>24/10/2026</strong></span>
-      <span>·</span>
-      <span>Tasa BCV Oficial: <strong>827,74 Bs/USD</strong></span>
-      <span>·</span>
-      <span class="badge-status">BORRADOR</span>
-    </div>
-
-    <!-- Zona B: Cliente -->
-    <div class="client-section">
-      <div class="client-header">
-        <div class="client-name">
-          <span class="tecla">F2</span> RIF J-31234567-8 · FERRETERÍA EL TORNILLO, C.A.
+      <div class="header-context">
+        <span>Sucursal: <span class="highlight">Principal Valencia</span></span>
+        <span class="header-divider">|</span>
+        <span>Punto: <span class="highlight">Caja 01 · Serie A</span></span>
+        <span class="header-divider">|</span>
+        <div class="bcv-pill">
+          <span class="bcv-dot"></span>
+          <span>Tasa BCV: 827,74 Bs/USD</span>
         </div>
-        <div class="client-address">Av. Andrés Bello, Galpón 12, Valencia, Edo. Carabobo · Condición: 01 Contado</div>
+      </div>
+    </header>
+
+    <div class="doc-nav">
+      <nav class="doc-types">
+        <span class="doc-tab active">Factura de Venta</span>
+        <span class="doc-tab">Nota de Crédito</span>
+        <span class="doc-tab">Nota de Débito</span>
+        <span class="doc-tab">Cotización</span>
+      </nav>
+
+      <div class="doc-identifiers">
+        <span>Documento: <strong class="doc-num">FAC-00048912</strong></span>
+        <span>Control: <strong class="doc-num">00-00892410</strong></span>
+        <span>Fecha: <strong>24/10/2026</strong></span>
+        <span class="phase-badge">Fase 2: Cobro & IGTF</span>
       </div>
     </div>
 
-    <!-- Zona E: Formas de Pago y Cierre Fiscal -->
-    <div class="summary-split">
-      <div class="payments-box">
-        <div class="section-title">Formas de Pago Seleccionadas</div>
-        
+    <section class="meta-panel">
+      <div class="customer-title">
+        <span class="key-badge">F2</span>
+        <span>FERRETERÍA EL TORNILLO, C.A.</span>
+        <span class="customer-rif">RIF: J-31234567-8</span>
+      </div>
+      <div class="customer-address">
+        Av. Andrés Bello, Galpón 12, Valencia, Edo. Carabobo · Condición: <strong>01 Contado (Caja)</strong>
+      </div>
+    </section>
+
+    <div class="settlement-panel">
+      
+      <!-- Desglose de Pagos -->
+      <section class="payments-section">
+        <div class="section-heading">
+          <span>Formas de Pago Seleccionadas</span>
+          <span class="key-badge">F9</span>
+        </div>
+
         <div class="payments-pills">
-          <div class="pill active">
-            Efectivo Divisas (USD)
-            <span class="tag-igtf">+3% IGTF aplicable</span>
+          <div class="payment-pill active">
+            <span>Efectivo Divisas (USD)</span>
+            <span class="igtf-tag">+3% IGTF</span>
           </div>
-          <div class="pill active">
-            Punto de Venta / Tarjeta
+          <div class="payment-pill active">
+            <span>Punto de Venta / Tarjeta</span>
           </div>
-          <div class="pill active">
-            Transferencia Bancaria
+          <div class="payment-pill active">
+            <span>Transferencia Bancaria</span>
           </div>
         </div>
 
-        <table class="payments-table">
+        <table class="payments-grid">
           <thead>
             <tr>
               <th>Método de Pago</th>
@@ -379,17 +460,17 @@
               <th style="text-align: center;">Moneda</th>
               <th style="text-align: right;">Tasa BCV</th>
               <th style="text-align: right;">Equivalente Bs.</th>
-              <th>Referencia / Detalle</th>
+              <th>Referencia / Lote</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Efectivo Divisas</strong> <span class="payment-tag-igtf">IGTF 3%</span></td>
+              <td><strong>Efectivo Divisas</strong> <span class="igtf-tag">IGTF 3%</span></td>
               <td style="text-align: right;">400,00</td>
               <td style="text-align: center;">USD</td>
               <td style="text-align: right;">827,74</td>
               <td style="text-align: right;"><strong>331.096,00</strong></td>
-              <td style="color: var(--color-text-3);">Caja fuerte Boveda USD</td>
+              <td style="color: var(--text-muted);">Caja Fuerte USD</td>
             </tr>
             <tr>
               <td><strong>Punto de Venta (Tarjeta)</strong></td>
@@ -397,15 +478,15 @@
               <td style="text-align: center;">VES</td>
               <td style="text-align: right;">—</td>
               <td style="text-align: right;"><strong>300.000,00</strong></td>
-              <td style="color: var(--color-text-3);">POS Banesco Lote #4891</td>
+              <td style="color: var(--text-muted);">POS Banesco Lote #4891</td>
             </tr>
             <tr>
-              <td><strong>Transferencia Inmediata</strong></td>
+              <td><strong>Transferencia Bancaria</strong></td>
               <td style="text-align: right;">100.195,74</td>
               <td style="text-align: center;">VES</td>
               <td style="text-align: right;">—</td>
               <td style="text-align: right;"><strong>100.195,74</strong></td>
-              <td style="color: var(--color-text-3);">Mercantil Ref: 918231</td>
+              <td style="color: var(--text-muted);">Mercantil Ref: 918231</td>
             </tr>
           </tbody>
         </table>
@@ -414,65 +495,66 @@
           <div>
             <span>Total Pagos Asignados:</span> <strong>731.291,74 Bs</strong>
           </div>
-          <div>
-            <strong>✓ Saldo Exactamente Cuadrado (0,00 Bs pendiente)</strong>
+          <div class="balance-ok">
+            <span>✓ Saldo Exactamente Cuadrado (0,00 Bs pendiente)</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="fiscal-box">
+      <!-- Resumen Fiscal -->
+      <section class="fiscal-summary-box">
         <div>
-          <div class="section-title">Liquidación Fiscal & Alícuotas</div>
-          <div class="fiscal-lines">
-            <div class="fiscal-row">
+          <div class="section-heading">Liquidación Fiscal & Alícuotas</div>
+          <div class="fiscal-rows">
+            <div class="fiscal-line">
               <span>Base Imponible General (16%):</span>
-              <strong>519.820,72 Bs</strong>
+              <span class="val">519.820,72 Bs</span>
             </div>
-            <div class="fiscal-row">
+            <div class="fiscal-line">
               <span>IVA General (16%):</span>
-              <strong>83.171,32 Bs</strong>
+              <span class="val">83.171,32 Bs</span>
             </div>
-            <div class="fiscal-row">
+            <div class="fiscal-line">
               <span>Base Imponible Reducida (8%):</span>
-              <strong>41.387,00 Bs</strong>
+              <span class="val">41.387,00 Bs</span>
             </div>
-            <div class="fiscal-row">
+            <div class="fiscal-line">
               <span>IVA Reducido (8%):</span>
-              <strong>3.310,96 Bs</strong>
+              <span class="val">3.310,96 Bs</span>
             </div>
-            <div class="fiscal-row">
+            <div class="fiscal-line">
               <span>Monto Total Exento:</span>
-              <strong>79.463,04 Bs</strong>
+              <span class="val">79.463,04 Bs</span>
             </div>
-            <div class="fiscal-row" style="color: var(--color-warning); background: #fff8f0; padding: 4px 6px; border-radius: 4px; border: 1px solid #ffd6ae;">
+            <div class="fiscal-line igtf-line">
               <span>IGTF Percibido (3% sobre $400 USD):</span>
-              <strong>9.932,88 Bs</strong>
+              <span class="val">+9.932,88 Bs</span>
             </div>
           </div>
         </div>
 
         <div>
-          <div class="total-box">
+          <div class="grand-total-card">
             <div>
-              <div class="total-label">Total a Pagar</div>
-              <div class="total-amount-usd">Equiv. $890,48 USD</div>
+              <div class="total-title">Total a Pagar</div>
+              <div class="total-ref-usd">Ref. $890,48 USD</div>
             </div>
-            <div class="total-amount-bs">737.085,92 Bs</div>
+            <div class="total-primary-bs">737.085,92 Bs</div>
           </div>
 
           <button class="btn-emitir">
-            Emitir Documento Fiscal <span class="tecla-inv">F9</span>
+            <span>Emitir Factura Fiscal</span>
+            <span class="key-badge-inv">F9</span>
           </button>
         </div>
-      </div>
+      </section>
     </div>
 
-    <!-- Zona F: Atajos -->
-    <div class="shortcuts-bar">
-      <div class="shortcut-item"><span class="tecla">Esc</span> Volver a Carga de Ítems</div>
-      <div class="shortcut-item"><span class="tecla">F9</span> Confirmar y Emitir</div>
-      <div class="shortcut-item"><span class="tecla">F8</span> Anular Documento</div>
-    </div>
+    <footer class="shortcuts-footer">
+      <div class="shortcut-pill"><span class="key-badge">Esc</span> <span>Volver a Carga de Ítems</span></div>
+      <div class="shortcut-pill"><span class="key-badge">F9</span> <span>Confirmar y Emitir</span></div>
+      <div class="shortcut-pill"><span class="key-badge">F8</span> <span>Anular Documento</span></div>
+    </footer>
 
   </div>
 
