@@ -14,6 +14,45 @@ const state = {
 
 const FALLBACK_POSTS = [
   {
+    "id": "dia-4",
+    "date": "2026-09-23",
+    "dayNumber": 4,
+    "title": "Terminal de Caja POS, Flujo Rápido de Cobro e Integración Fiscal con Impresora BIXOLON",
+    "category": "Frontend POS & Impresión Fiscal",
+    "tags": [
+      "Terminal Caja",
+      "POS",
+      "BIXOLON SRP-350/812",
+      "Impresión Fiscal",
+      "SENIAT",
+      "UX Cajero",
+      "Atajos de Teclado",
+      "Multimoneda & IGTF"
+    ],
+    "summary": "Optimización integral de la interfaz del cajero para agilizar la facturación en punto de venta, diseño de plantilla de ticket fiscal según normativas SENIAT e integración directa con impresoras fiscales BIXOLON (modelos SRP-350 y SRP-812).",
+    "highlights": [
+      "Terminal de Caja Optimizado (POS): Nueva vista ágil para cajero con atajos de teclado rápidos (F2 Nuevo Cliente, F3 Agregar Producto, F9 Procesar Pago) diseñada para alto volumen de despacho",
+      "Modal de Cobro y Liquidación Rápida: Flujo en dos pasos con cálculo automático en Bolívares y Divisas (Tasa BCV en vivo), soporte para Punto/Débito, Pago Móvil, Transferencia, Efectivo y recargo IGTF (+3%)",
+      "Plantilla y Diseño de Factura Fiscal 80mm: Formato de ticket térmico homologado según especificaciones del SENIAT con desglose de alícuotas (16%, 8%, exento), RIF, datos del receptor y pie de máquina fiscal (MF)",
+      "Integración de Impresión Fiscal BIXOLON: Protocolo de comunicación con impresoras fiscales BIXOLON SRP-350 y SRP-812 con confirmación de emisión exitosa, re-impresión inmediata [P] y enlace directo al ERP",
+      "Experiencia Operativa Cero Fricción: Navegación por teclado completa ([Enter / Espacio] para emitir siguiente factura, [Esc] para regresar) maximizando la velocidad de atención en caja"
+    ],
+    "screenshots": [
+      {
+        "url": "assets/uploads/factura-proquimicos-carga.png",
+        "caption": "Terminal de Caja POS: Interfaz optimizada para cajero con selección rápida de cliente, tasa BCV en vivo y atajos de función"
+      },
+      {
+        "url": "assets/uploads/factura-proquimicos-cobro.png",
+        "caption": "Módulo de Liquidación y Cobro: Modal rápido con selección de método de pago (Punto / Débito, Pago Móvil, Divisas con IGTF) y referencia bancaria"
+      },
+      {
+        "url": "assets/uploads/factura-proquimicos-preview.png",
+        "caption": "Preview de Impresión Fiscal BIXOLON: Ticket fiscal SENIAT 80mm generado con éxito, comandos de re-impresión y emisión continua"
+      }
+    ]
+  },
+  {
     "id": "avance-3",
     "date": "2026-09-22",
     "dayNumber": 3,

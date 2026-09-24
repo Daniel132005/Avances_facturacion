@@ -1,0 +1,12 @@
+{
+  "name": "nexus-avances-portal",
+  "version": "1.0.0",
+  "description": "Portal de Bitácora y Avances - Nexus Facturación",
+  "scripts": {
+    "dev": "npx -y serve . -l 3000",
+    "start": "npx -y serve . -l 3000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
